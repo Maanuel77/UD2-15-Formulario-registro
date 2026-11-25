@@ -1,0 +1,91 @@
+<div class="container my-5" style="max-width: 800px">
+  <form class="card shadow p-4" [formGroup]="registerForm" (ngSubmit)="registrar()">
+    <h1 class="text-center text-primary mb-4">Registro en la plataforma de cursos</h1>
+
+    <h4 class="border-bottom pb-2 mt-3 mb-3">Datos personales</h4>
+    <div class="row" formGroupName="personales">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-control" [class.is-invalid]="mostrar('personales.nombre')" formControlName="nombre">
+        @if (hasError('personales.nombre', 'required')) { <small class="text-danger d-block">El nombre es obligatorio</small> }
+        @if (hasError('personales.nombre', 'minlength')) { <small class="text-danger d-block">Mínimo 2 caracteres</small> }
+        @if (hasError('personales.nombre', 'maxlength')) { <small class="text-danger d-block">Máximo 30 caracteres</small> }
+        @if (hasError('personales.nombre', 'pattern')) { <small class="text-danger d-block">Solo se permiten letras</small> }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Apellidos</label>
+        <input type="text" class="form-control" [class.is-invalid]="mostrar('personales.apellidos')" formControlName="apellidos">
+        @if (hasError('personales.apellidos', 'required')) { <small class="text-danger d-block">Los apellidos son obligatorios</small> }
+        @if (hasError('personales.apellidos', 'minlength')) { <small class="text-danger d-block">Mínimo 2 caracteres</small> }
+        @if (hasError('personales.apellidos', 'maxlength')) { <small class="text-danger d-block">Máximo 50 caracteres</small> }
+        @if (hasError('personales.apellidos', 'pattern')) { <small class="text-danger d-block">Solo se permiten letras</small> }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">DNI/NIE</label>
+        <input type="text" class="form-control" [class.is-invalid]="mostrar('personales.dni')" formControlName="dni">
+        @if (hasError('personales.dni', 'required')) { <small class="text-danger d-block">El DNI/NIE es obligatorio</small> }
+        @if (hasError('personales.dni', 'pattern')) { <small class="text-danger d-block">Formato no válido</small> }
+        @if (hasError('personales.dni', 'letra')) { <small class="text-danger d-block">La letra no corresponde al número</small> }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Teléfono móvil</label>
+        <input type="tel" class="form-control" [class.is-invalid]="mostrar('personales.movil')" formControlName="movil" placeholder="+34600000000">
+        @if (mostrar('personales.movil')) { <small class="text-danger d-block">Introduce un móvil español válido</small> }
+      </div>
+    </div>
+
+    <h4 class="border-bottom pb-2 mt-3 mb-3">Datos de la cuenta</h4>
+    <div class="row" formGroupName="cuenta">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Nombre de usuario</label>
+        <input type="text" class="form-control" [class.is-invalid]="mostrar('cuenta.usuario')" formControlName="usuario">
+        @if (hasError('cuenta.usuario', 'required')) { <small class="text-danger d-block">El usuario es obligatorio</small> }
+        @if (hasError('cuenta.usuario', 'minlength') || hasError('cuenta.usuario', 'maxlength')) { <small class="text-danger d-block">Entre 4 y 15 caracteres</small> }
+        @if (hasError('cuenta.usuario', 'pattern')) { <small class="text-danger d-block">Debe empezar por letra y no contener espacios ni símbolos</small> }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" [class.is-invalid]="mostrar('cuenta.email')" formControlName="email">
+        @if (hasError('cuenta.email', 'required')) { <small class="text-danger d-block">El email es obligatorio</small> }
+        @if (hasError('cuenta.email', 'email')) { <small class="text-danger d-block">Formato de email no válido</small> }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-control" [class.is-invalid]="mostrar('cuenta.password')" formControlName="password">
+        @if (passwordTocada()) {
+          @if (hasError('cuenta.password', 'required')) { <small class="text-danger d-block">La contraseña es obligatoria</small> }
+          @if (hasError('cuenta.password', 'minlength')) { <small class="text-danger d-block">Mínimo 8 caracteres</small> }
+          @if (hasError('cuenta.password', 'maxlength')) { <small class="text-danger d-block">Máximo 20 caracteres</small> }
+          @if (!passwordCumple(regex.MAYUSCULA)) { <small class="text-danger d-block">Debe contener al menos una mayúscula</small> }
+          @if (!passwordCumple(regex.MINUSCULA)) { <small class="text-danger d-block">Debe contener al menos una minúscula</small> }
+          @if (!passwordCumple(regex.NUMERO)) { <small class="text-danger d-block">Debe contener al menos un número</small> }
+          @if (!passwordCumple(regex.ESPECIAL)) { <small class="text-danger d-block">Debe contener al menos un carácter especial</small> }
+        }
+      </div>
+    </div>
+
+    <h4 class="border-bottom pb-2 mt-3 mb-3">Preferencias del curso</h4>
+    <div class="row" formGroupName="preferencias">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Curso de interés</label>
+        <select class="form-select" [class.is-invalid]="mostrar('preferencias.curso')" formControlName="curso">
+          <option value="">Selecciona</option>
+          @for (curso of cursos; track curso) { <option [value]="curso">{{ curso }}</option> }
+        </select>
+        @if (mostrar('preferencias.curso')) { <small class="text-danger d-block">Selecciona un curso</small> }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Horas disponibles a la semana</label>
+        <input type="number" class="form-control" [class.is-invalid]="mostrar('preferencias.horas')" formControlName="horas">
+        @if (mostrar('preferencias.horas')) { <small class="text-danger d-block">Entre 2 y 40 horas</small> }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Código postal</label>
+        <input type="text" class="form-control" [class.is-invalid]="mostrar('preferencias.codigoPostal')" formControlName="codigoPostal">
+        @if (mostrar('preferencias.codigoPostal')) { <small class="text-danger d-block">Código postal no válido</small> }
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3" [disabled]="registerForm.invalid">Registrarse</button>
+  </form>
+</div>

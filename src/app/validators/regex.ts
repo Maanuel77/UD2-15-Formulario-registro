@@ -1,0 +1,9 @@
+export const SOLO_LETRAS = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ ]+$/;
+export const DNI_NIE = /^([0-9]{8}|[XYZxyz][0-9]{7})[A-Za-z]$/;
+export const MOVIL = /^(\+34)?[67][0-9]{8}$/;
+export const USUARIO = /^[a-zA-Z][a-zA-Z0-9_]*$/;
+export const MAYUSCULA = /[A-Z]/;
+export const MINUSCULA = /[a-z]/;
+export const NUMERO = /[0-9]/;
+export const ESPECIAL = /[^A-Za-z0-9]/;
+export const CODIGO_POSTAL = /^(0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3})$/;
